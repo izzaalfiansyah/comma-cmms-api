@@ -3,7 +3,8 @@ import { LoginParams } from './dto/login_params.dto';
 import { Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
 import { compare } from 'bcrypt';
-import { sign } from 'jsonwebtoken';
+import { decode, sign, verify } from 'jsonwebtoken';
+import { RefreshTokenParams } from './dto/refresh_token_params.dto';
 
 const AUTHSECRETKEY = 'AUTHSECRETKEY';
 
@@ -42,5 +43,31 @@ export class Auth {
         refresh_token,
       },
     };
+  }
+
+  async refreshToken(params: RefreshTokenParams) {
+    try {
+      const payload: any = verify(params.token, AUTHSECRETKEY);
+
+      const user = await this.userRepository.findOneOrFail({
+        where: { id: payload.id },
+      });
+
+      if (!user) {
+        throw new HttpException('token is not valid', 400);
+      }
+
+      const token = sign({ id: user.id }, AUTHSECRETKEY, {
+        expiresIn: '1 days',
+      });
+
+      return {
+        success: true,
+        message: 'retrieve new token successfully',
+        data: { token },
+      };
+    } catch (_: any) {
+      throw new HttpException('token is expired', 400);
+    }
   }
 }
