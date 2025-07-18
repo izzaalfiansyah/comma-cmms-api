@@ -14,10 +14,11 @@ export class AppGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const req = context.switchToHttp().getRequest<Request>();
 
-    const api_key = req.headers['x-api-key'];
+    const app_key = process.env.APP_KEY;
+    const request_app_key = req.headers['x-app-key'];
 
-    if (api_key != '000000000') {
-      throw new HttpException('api key invalid', 403);
+    if (app_key != request_app_key) {
+      throw new HttpException('app key invalid', 403);
     }
 
     return true;

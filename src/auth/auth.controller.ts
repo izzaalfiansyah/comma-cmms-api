@@ -8,6 +8,6 @@ export class AuthController {
 
   @Post('/login')
   login(@Body() params: LoginParams) {
-    this.authProvider.login(params);
+    return this.authProvider.login(params);
   }
 }
