@@ -48,7 +48,7 @@ export class Auth {
 
   async refreshToken(params: RefreshTokenParams) {
     try {
-      const payload: any = verify(params.token, AUTHSECRETKEY);
+      const payload: any = verify(params.refresh_token, AUTHSECRETKEY);
 
       const user = await this.userRepository.findOneOrFail({
         where: { id: payload.id },
