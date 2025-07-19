@@ -5,8 +5,9 @@ import { User } from 'src/entity/user.entity';
 import { compare } from 'bcrypt';
 import { decode, sign, verify } from 'jsonwebtoken';
 import { RefreshTokenParams } from './dto/refresh_token_params.dto';
+import { Request } from 'express';
 
-const AUTHSECRETKEY = 'AUTHSECRETKEY';
+export const AUTHSECRETKEY = 'AUTHSECRETKEY';
 
 @Injectable()
 export class Auth {
@@ -69,5 +70,15 @@ export class Auth {
     } catch (_: any) {
       throw new HttpException('token is expired', 400);
     }
+  }
+
+  profile(req: Request) {
+    const user = (req as any).user;
+
+    return {
+      success: true,
+      message: 'Profile successfully retrieved',
+      data: user,
+    };
   }
 }
