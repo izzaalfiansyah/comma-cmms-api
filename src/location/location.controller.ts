@@ -1,10 +1,13 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   Inject,
+  Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -22,8 +25,8 @@ export class LocationController {
     private readonly locationRepository: TreeRepository<Location>,
   ) {}
 
-  @Get('/')
-  async getLocation(@Query() query: Record<string, any>) {
+  @Get()
+  async get(@Query() query: Record<string, any>) {
     let locations: Array<Location> = [];
 
     // if (query.id) {
@@ -52,10 +55,10 @@ export class LocationController {
     };
   }
 
-  @Post('/')
+  @Post()
   @Roles(['admin'])
   @UseGuards(RoleGuard)
-  async storeLocation(@Body() params: StoreLocationParams) {
+  async store(@Body() params: StoreLocationParams) {
     let parent: Location | undefined = undefined;
 
     if (params.parentId) {
@@ -73,6 +76,45 @@ export class LocationController {
     return {
       success: true,
       message: 'Location successfully created',
+    };
+  }
+
+  @Put(':id')
+  @Roles(['admin'])
+  @UseGuards(RoleGuard)
+  async update(@Body() params: StoreLocationParams, @Param() id: number) {
+    const location = await this.locationRepository.findOneBy({ id: id });
+
+    if (!location) {
+      throw new HttpException('location not found', 400);
+    }
+
+    location.name = params.name;
+
+    if (params.parentId) {
+      location.parent =
+        (await this.locationRepository.findOneBy({
+          id: params.parentId,
+        })) || undefined;
+    }
+
+    await this.locationRepository.save(location);
+
+    return {
+      success: true,
+      message: 'Location successfully updated',
+    };
+  }
+
+  @Delete(':id')
+  @Roles(['admin'])
+  @UseGuards(RoleGuard)
+  async destroy(@Param() id: number) {
+    await this.locationRepository.delete(id);
+
+    return {
+      success: true,
+      message: 'Location successfully deleted',
     };
   }
 }
