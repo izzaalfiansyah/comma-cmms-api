@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Role } from './role.entity';
 
 @Entity('users')
 export class User {
@@ -15,6 +16,9 @@ export class User {
 
   @Column()
   name: string;
+
+  @ManyToOne(() => Role, (role) => role.id)
+  role: Role;
 
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;

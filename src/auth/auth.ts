@@ -3,7 +3,7 @@ import { LoginParams } from './dto/login_params.dto';
 import { Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
 import { compare } from 'bcrypt';
-import { decode, sign, verify } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 import { RefreshTokenParams } from './dto/refresh_token_params.dto';
 import { Request } from 'express';
 
