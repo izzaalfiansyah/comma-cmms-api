@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Location } from './location.entity';
 
 @Entity('assets')
 export class Asset {
@@ -15,7 +16,13 @@ export class Asset {
   image: string;
 
   @Column()
+  qrcode: string;
+
+  @Column()
   type: string;
+
+  @ManyToOne(() => Location, (location) => location.id)
+  location: Location;
 
   @Column('date')
   purchase_date: Date;
