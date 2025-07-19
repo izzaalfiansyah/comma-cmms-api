@@ -17,7 +17,9 @@ export class User {
   @Column()
   name: string;
 
-  @ManyToOne(() => Role, (role) => role.id)
+  @ManyToOne(() => Role, (role) => role.id, {
+    eager: true,
+  })
   role: Role;
 
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })

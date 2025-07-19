@@ -1,39 +1,32 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Inject,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { Request } from 'express';
+import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { verify } from 'jsonwebtoken';
 import { AUTHSECRETKEY } from './auth';
 import { Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
+import { Request } from 'express';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthMiddleware implements NestMiddleware {
   constructor(
     @Inject('USER_PROVIDER') private readonly userRepository: Repository<User>,
   ) {}
 
-  async canActivate(context: ExecutionContext) {
+  async use(req: Request, res: any, next: () => void) {
     try {
-      const req = context.switchToHttp().getRequest<Request>();
       const token = req.headers.authorization?.replace('Bearer ', '');
-
       const payload: any = verify(token as string, AUTHSECRETKEY);
+
       const user = await this.userRepository.findOneBy({ id: payload.id });
 
       if (!user) {
-        throw new Error('no user found');
+        throw new Error('user not found');
       }
 
       (req as any).user = user;
-
-      return true;
     } catch (e: any) {
-      throw new UnauthorizedException();
+      // do nothing
     }
+
+    next();
   }
 }

@@ -1,13 +1,16 @@
 import {
   Column,
   Entity,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Tree,
+  TreeChildren,
+  TreeParent,
 } from 'typeorm';
 import { Asset } from './asset.entity';
 
 @Entity('locations')
+@Tree('nested-set')
 export class Location {
   @PrimaryGeneratedColumn()
   id: number;
@@ -15,10 +18,10 @@ export class Location {
   @Column()
   name: string;
 
-  @ManyToOne(() => Location, (location) => location.children)
-  parent: Location;
+  @TreeParent()
+  parent?: Location;
 
-  @OneToMany(() => Location, (location) => location.parent)
+  @TreeChildren()
   children: Array<Location>;
 
   @OneToMany(() => Asset, (asset) => asset.location)
