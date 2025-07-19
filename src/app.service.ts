@@ -10,11 +10,17 @@ export class AppService {
   ) {}
 
   async getHello() {
-    await this.userRepository.save({
+    const user = await this.userRepository.findOneBy({
       email: 'superadmin@admin.com',
-      password: hashSync('superadmin', 10),
-      name: 'Muhammad Izza Alfiansyah',
     });
+
+    if (!user) {
+      await this.userRepository.save({
+        email: 'superadmin@admin.com',
+        password: hashSync('superadmin', 10),
+        name: 'Muhammad Izza Alfiansyah',
+      });
+    }
 
     return {
       hello: 'World',
