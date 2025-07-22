@@ -16,6 +16,9 @@ export class WorkOrder {
   id: number;
 
   @Column()
+  title: string;
+
+  @Column()
   description: string;
 
   @Column('enum', {
@@ -30,8 +33,14 @@ export class WorkOrder {
       'delivered',
       'paid',
     ],
+    default: 'open',
   })
   status: string;
+
+  @Column('enum', {
+    enum: ['low', 'medium', 'high', 'critical'],
+  })
+  priority: string;
 
   @ManyToOne(() => User, (user) => user.id)
   requestedBy: User;
@@ -44,4 +53,12 @@ export class WorkOrder {
 
   @OneToMany(() => WorkOrderTask, (task) => task.workOrder)
   tasks: WorkOrderTask[];
+
+  @Column('timestamp', {
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @Column('timestamp', { nullable: true })
+  updatedAt?: Date;
 }

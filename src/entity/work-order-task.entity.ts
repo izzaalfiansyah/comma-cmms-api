@@ -8,6 +8,9 @@ export class WorkOrderTask {
   id: number;
 
   @Column()
+  name: string;
+
+  @Column()
   description: string;
 
   @Column('enum', {
@@ -22,12 +25,26 @@ export class WorkOrderTask {
       'delivered',
       'paid',
     ],
+    default: 'open',
   })
   status: string;
+
+  @Column('enum', {
+    enum: ['low', 'medium', 'high', 'critical'],
+  })
+  priority: string;
 
   @ManyToOne(() => WorkOrder, (workOrder) => workOrder.id)
   workOrder: WorkOrder;
 
   @ManyToOne(() => User, (user) => user.id)
   assignedTo: User;
+
+  @Column('timestamp', {
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @Column('timestamp', { nullable: true })
+  updatedAt?: Date;
 }

@@ -22,6 +22,7 @@ export class PurchaseOrder {
       'delivered',
       'paid',
     ],
+    default: 'open',
   })
   status: string;
 
@@ -30,4 +31,12 @@ export class PurchaseOrder {
 
   @ManyToOne(() => Asset, (asset) => asset.id)
   asset: Asset;
+
+  @Column('timestamp', {
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @Column('timestamp', { nullable: true })
+  updatedAt?: Date;
 }

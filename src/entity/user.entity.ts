@@ -22,6 +22,29 @@ export class User {
   })
   role: Role;
 
+  @Column('varchar', { length: 15, nullable: true })
+  phone?: number;
+
+  @Column({ nullable: true })
+  address?: string;
+
+  @Column({ nullable: true })
+  photo?: string;
+
+  @Column('boolean', { default: false })
+  verified: boolean;
+
+  @Column('boolean', { default: true })
+  available: boolean;
+
+  @Column('timestamp', {
+    nullable: true,
+  })
+  lastLoginAt?: Date;
+
   @Column('timestamp', { default: () => 'CURRENT_TIMESTAMP' })
-  created_at: Date;
+  createdAt: Date;
+
+  @Column('timestamp', { nullable: true })
+  updatedAt?: Date;
 }

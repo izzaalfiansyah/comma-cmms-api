@@ -8,10 +8,16 @@ export class MaintenanceSchedule {
   id: number;
 
   @Column()
-  scheduleDate: Date;
+  date: Date;
 
   @Column()
-  scheduleType: string; // (e.g. "daily", "weekly", "monthly")
+  description: string;
+
+  @Column('enum', {
+    enum: ['daily', 'weekly', 'monthly'],
+    default: 'daily',
+  })
+  type: string;
 
   @ManyToOne(() => Asset, (asset) => asset.id)
   asset: Asset;

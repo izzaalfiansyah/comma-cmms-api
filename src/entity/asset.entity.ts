@@ -35,5 +35,8 @@ export class Asset {
   @Column('timestamp', {
     default: () => 'current_timestamp',
   })
-  created_at: Date;
+  createdAt: Date;
+
+  @Column('timestamp', { nullable: true })
+  updatedAt?: Date;
 }
