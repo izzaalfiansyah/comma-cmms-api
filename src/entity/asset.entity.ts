@@ -12,6 +12,11 @@ export class Asset {
   @Column()
   description: string;
 
+  @Column('integer', {
+    default: 0,
+  })
+  qantity: number;
+
   @Column()
   image: string;
 
