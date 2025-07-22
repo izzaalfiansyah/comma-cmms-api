@@ -36,6 +36,9 @@ export class Auth {
       expiresIn: '30 days',
     });
 
+    user.lastLoginAt = new Date();
+    await this.userRepository.save(user);
+
     return {
       success: true,
       message: 'Login successfully',
