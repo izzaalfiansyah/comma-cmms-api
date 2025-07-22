@@ -10,8 +10,20 @@ export class PurchaseOrder {
   @Column()
   description: string;
 
-  @Column()
-  status: string; // (e.g. "open", "in_progress", "completed")
+  @Column('enum', {
+    enum: [
+      'open',
+      'in_progress',
+      'completed',
+      'pending',
+      'canceled',
+      'rejected',
+      'approved',
+      'delivered',
+      'paid',
+    ],
+  })
+  status: string;
 
   @ManyToOne(() => User, (user) => user.id)
   requestedBy: User;
