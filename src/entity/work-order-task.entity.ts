@@ -16,8 +16,10 @@ export class WorkOrderTask {
   @Column()
   name: string;
 
-  @Column()
-  description: string;
+  @Column({
+    nullable: true,
+  })
+  description?: string;
 
   @Column('enum', {
     enum: [

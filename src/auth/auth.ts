@@ -16,7 +16,11 @@ export class Auth {
   ) {}
 
   async login(params: LoginParams) {
-    const user = await this.userRepository.findOneBy({ email: params.email });
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.email = :email', { email: params.email })
+      .getOne();
 
     if (!user) {
       throw new HttpException('user not found', 404);

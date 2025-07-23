@@ -1,14 +1,23 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { User } from './user.entity';
 import { Part } from './part.entity';
+import { PurchaseOrderPart } from './purchase-order-part.entity';
 
 @Entity('purchase_orders')
 export class PurchaseOrder {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  description: string;
+  @Column({
+    nullable: true,
+  })
+  description?: string;
 
   @Column('enum', {
     enum: [
@@ -29,8 +38,10 @@ export class PurchaseOrder {
   @ManyToOne(() => User, (user) => user.id)
   requestedBy: User;
 
-  @ManyToOne(() => Part, (part) => part.id)
-  part: Part;
+  @OneToMany(() => PurchaseOrderPart, (part) => part.purchaseOrder, {
+    eager: true,
+  })
+  parts: Array<Part>;
 
   @Column('timestamp', {
     default: () => 'CURRENT_TIMESTAMP',
