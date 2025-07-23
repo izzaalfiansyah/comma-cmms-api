@@ -1,9 +1,9 @@
 import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { verify } from 'jsonwebtoken';
-import { AUTHSECRETKEY } from './auth';
 import { Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
 import { Request } from 'express';
+import { AUTHSECRETKEY } from './auth.service';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {

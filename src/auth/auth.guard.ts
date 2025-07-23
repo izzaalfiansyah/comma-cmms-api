@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { verify } from 'jsonwebtoken';
-import { AUTHSECRETKEY } from './auth';
+import { AUTHSECRETKEY } from './auth.service';
 import { Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
 

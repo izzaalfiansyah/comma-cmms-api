@@ -10,7 +10,7 @@ import { Request } from 'express';
 export const AUTHSECRETKEY = 'AUTHSECRETKEY';
 
 @Injectable()
-export class Auth {
+export class AuthService {
   constructor(
     @Inject('USER_PROVIDER') private userRepository: Repository<User>,
   ) {}

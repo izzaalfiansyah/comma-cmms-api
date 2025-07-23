@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { CommonFilter } from 'src/dto/common-filter.dto';
 import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
-import { UserParams } from './dto/users-params.dto';
 
 @Injectable()
 export class UserService {
@@ -9,16 +9,19 @@ export class UserService {
     @Inject('USER_PROVIDER') private readonly userRepository: Repository<User>,
   ) {}
 
-  async findAll(params: UserParams) {
+  async findAll(params: CommonFilter) {
     let query = this.userRepository.createQueryBuilder('user');
-    const limit = params.limit || 10;
-    const offset = params.offset || 0;
-
-    query = query.take(limit).skip(offset);
 
     if (params.q) {
       query = query.where('user.name like :q', { q: `%${params.q}%` });
     }
+
+    const totalUsers = await query.getCount();
+
+    const limit = params.limit || 10;
+    const offset = params.offset || 0;
+
+    query = query.take(limit).skip(offset);
 
     const users = await query.getMany();
 
@@ -26,6 +29,7 @@ export class UserService {
       success: true,
       message: 'Users retrieved successfully',
       data: {
+        total: totalUsers,
         users,
       },
     };
