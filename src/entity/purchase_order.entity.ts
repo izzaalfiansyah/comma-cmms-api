@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
-import { Asset } from './asset.entity';
+import { Part } from './part.entity';
 
 @Entity('purchase_orders')
 export class PurchaseOrder {
@@ -29,8 +29,8 @@ export class PurchaseOrder {
   @ManyToOne(() => User, (user) => user.id)
   requestedBy: User;
 
-  @ManyToOne(() => Asset, (asset) => asset.id)
-  asset: Asset;
+  @ManyToOne(() => Part, (part) => part.id)
+  part: Part;
 
   @Column('timestamp', {
     default: () => 'CURRENT_TIMESTAMP',

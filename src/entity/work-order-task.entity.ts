@@ -1,6 +1,12 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { WorkOrder } from './work-order.entity';
-import { User } from './user.entity';
+import { WorkOrderTaskPart } from './work-order-task-part.entity';
 
 @Entity('work_order_tasks')
 export class WorkOrderTask {
@@ -37,8 +43,10 @@ export class WorkOrderTask {
   @ManyToOne(() => WorkOrder, (workOrder) => workOrder.id)
   workOrder: WorkOrder;
 
-  @ManyToOne(() => User, (user) => user.id)
-  assignedTo: User;
+  @OneToMany(() => WorkOrderTaskPart, (part) => part.workOrderTask, {
+    eager: true,
+  })
+  parts: Array<WorkOrderTaskPart>;
 
   @Column('timestamp', {
     default: () => 'CURRENT_TIMESTAMP',

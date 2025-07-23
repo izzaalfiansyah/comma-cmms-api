@@ -45,13 +45,16 @@ export class WorkOrder {
   @ManyToOne(() => User, (user) => user.id)
   requestedBy: User;
 
-  @ManyToOne(() => Location, (location) => location.id)
+  @ManyToOne(() => User, (user) => user.id)
+  assignedTo: User;
+
+  @ManyToOne(() => Location, (location) => location.id, { eager: true })
   location: Location;
 
-  @ManyToOne(() => Asset, (asset) => asset.id)
+  @ManyToOne(() => Asset, (asset) => asset.id, { eager: true })
   asset: Asset;
 
-  @OneToMany(() => WorkOrderTask, (task) => task.workOrder)
+  @OneToMany(() => WorkOrderTask, (task) => task.workOrder, { eager: true })
   tasks: WorkOrderTask[];
 
   @Column('timestamp', {

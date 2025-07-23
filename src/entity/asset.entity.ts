@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Location } from './location.entity';
+import { Category } from './category.entity';
 
 @Entity('assets')
 export class Asset {
@@ -7,15 +8,16 @@ export class Asset {
   id: number;
 
   @Column()
+  serialNumber: string;
+
+  @Column()
   name: string;
 
   @Column()
   description: string;
 
-  @Column('integer', {
-    default: 0,
-  })
-  qantity: number;
+  @ManyToOne(() => Category, (category) => category.id)
+  category: Category;
 
   @Column()
   image: string;
