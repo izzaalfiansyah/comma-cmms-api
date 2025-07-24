@@ -10,7 +10,7 @@ import {
 import { Asset } from './asset.entity';
 
 @Entity('locations')
-@Tree('nested-set')
+@Tree('closure-table')
 export class Location {
   @PrimaryGeneratedColumn()
   id: number;

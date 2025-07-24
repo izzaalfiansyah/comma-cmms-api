@@ -7,9 +7,16 @@ import { roleProvider } from './role/role';
 import { AppMiddleware } from './app/app.middleware';
 import { LocationModule } from './location/location.module';
 import { UserModule } from './user/user.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
-  imports: [AuthModule, CommonModule, LocationModule, UserModule],
+  imports: [
+    AuthModule,
+    CommonModule,
+    LocationModule,
+    UserModule,
+    CategoryModule,
+  ],
   controllers: [AppController],
   providers: [AppService, ...roleProvider],
 })

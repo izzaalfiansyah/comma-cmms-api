@@ -16,7 +16,10 @@ export class Asset {
   @Column()
   description: string;
 
-  @ManyToOne(() => Category, (category) => category.id)
+  @ManyToOne(() => Category, (category) => category.id, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   category: Category;
 
   @Column()

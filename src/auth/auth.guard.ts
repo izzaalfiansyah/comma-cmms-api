@@ -5,9 +5,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Request } from 'express';
-import { verify } from 'jsonwebtoken';
-import { AUTHSECRETKEY } from './auth.service';
 import { Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
 
@@ -17,23 +14,13 @@ export class AuthGuard implements CanActivate {
     @Inject('USER_PROVIDER') private readonly userRepository: Repository<User>,
   ) {}
 
-  async canActivate(context: ExecutionContext) {
-    try {
-      const req = context.switchToHttp().getRequest<Request>();
-      const token = req.headers.authorization?.replace('Bearer ', '');
+  canActivate(context: ExecutionContext) {
+    const req = context.switchToHttp().getRequest<any>();
 
-      const payload: any = verify(token as string, AUTHSECRETKEY);
-      const user = await this.userRepository.findOneBy({ id: payload.id });
-
-      if (!user) {
-        throw new Error('no user found');
-      }
-
-      (req as any).user = user;
-
-      return true;
-    } catch (e: any) {
-      throw new UnauthorizedException();
+    if (!req.user) {
+      throw new UnauthorizedException('Unauthorized');
     }
+
+    return true;
   }
 }
