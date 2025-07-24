@@ -2,10 +2,10 @@ import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { LoginParams } from './dto/login_params.dto';
 import { Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
-import { compare } from 'bcrypt';
 import { sign, verify } from 'jsonwebtoken';
 import { RefreshTokenParams } from './dto/refresh_token_params.dto';
 import { Request } from 'express';
+import { Password } from './lib/password.lib';
 
 export const AUTHSECRETKEY = 'AUTHSECRETKEY';
 
@@ -26,7 +26,7 @@ export class AuthService {
       throw new HttpException('user not found', 404);
     }
 
-    const isValid = await compare(params.password, user.password);
+    const isValid = await Password.check(params.password, user.password);
 
     if (!isValid) {
       throw new HttpException('wrong password', 401);

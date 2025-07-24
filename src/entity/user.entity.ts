@@ -25,7 +25,7 @@ export class User {
   role: Role;
 
   @Column('varchar', { length: 15, nullable: true })
-  phone?: number;
+  phone?: string;
 
   @Column({ nullable: true })
   address?: string;
@@ -34,10 +34,10 @@ export class User {
   photo?: string;
 
   @Column('boolean', { default: false })
-  verified: boolean;
+  verified?: boolean;
 
   @Column('boolean', { default: true })
-  available: boolean;
+  available?: boolean;
 
   @Column('timestamp', {
     nullable: true,

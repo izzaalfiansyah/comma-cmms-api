@@ -1,8 +1,8 @@
 import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from './entity/user.entity';
-import { hashSync } from 'bcrypt';
 import { Role } from './entity/role.entity';
+import { Password } from './auth/lib/password.lib';
 
 @Injectable()
 export class AppService {
@@ -32,14 +32,15 @@ export class AppService {
       );
 
       const admin_role = await this.roleRepository.findOneBy({ name: 'admin' });
+      const password = await Password.make('superadmin');
 
       await this.userRepository.deleteAll();
       await this.userRepository.save({
         id: 1,
         email: 'superadmin@admin.com',
-        password: hashSync('superadmin', 10),
         name: 'Muhammad Izza Alfiansyah',
         role: admin_role as Role,
+        password,
       });
 
       return {
