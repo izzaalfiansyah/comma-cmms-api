@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CommonFilter } from 'src/dto/common-filter.dto';
 import { CreateUserParams } from './dto/create-user-params.dto';
+import { RoleGuard, Roles } from 'src/role/role.guard';
 
 @Controller('user')
 export class UserController {
@@ -13,6 +14,8 @@ export class UserController {
   }
 
   @Post()
+  @Roles(['admin'])
+  @UseGuards(RoleGuard)
   store(@Body() params: CreateUserParams) {
     return this.userService.store(params);
   }
